@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_URL")
+}
+
+model users_api {
+  id            String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  username      String   @unique
+  password_hash String
+  api_key       String   @unique @default(dbgenerated("uuid_generate_v4()"))
+  created_at    DateTime @default(now()) @db.Timestamptz(6)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model Campaign {
+  id          String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name        String
+  utmCampaign String
+  startAt     DateTime? @db.Timestamptz(6)
+  endAt       DateTime? @db.Timestamptz(6)
+  links       Link[]
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model Click {
+  id        String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  linkId    String   @db.Uuid
+  timestamp DateTime @default(now()) @db.Timestamptz(6)
+  referrer  String?
+  userAgent String?
+  link      Link     @relation(fields: [linkId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_click_link")
+
+  @@index([linkId], map: "idx_click_link_id")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model Link {
+  id         String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  productId  String   @db.Uuid
+  campaignId String   @db.Uuid
+  shortCode  String   @unique
+  targetUrl  String
+  clicks     Click[]
+  campaign   Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_link_campaign")
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_link_product")
+
+  @@index([shortCode], map: "idx_link_short_code")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model Offer {
+  id            String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  productId     String   @db.Uuid
+  marketplace   String
+  storeName     String
+  title         String?
+  imageUrl      String?
+  price         Decimal  @db.Decimal(10, 2)
+  productUrl    String
+  lastCheckedAt DateTime @default(now()) @db.Timestamptz(6)
+  product       Product  @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_product")
+
+  @@index([productId], map: "idx_offer_product_id")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model Product {
+  id        String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  title     String
+  imageUrl  String?
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  links     Link[]
+  offers    Offer[]
+}
