@@ -1,0 +1,29 @@
+{
+  "name": "jns-api",
+  "version": "1.0.0",
+  "description": "A simple Node.js REST API",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nirun/jns-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Nirun/jns-api/issues"
+  },
+  "homepage": "https://github.com/Nirun/jns-api#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "jest": "^30.2.0",
+    "supertest": "^7.2.2"
+  }
+}
