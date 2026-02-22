@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, Res, Req, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Res, Req, UseGuards, Patch, Delete } from '@nestjs/common';
 import { AffiliateService } from './affiliate.service';
 import { CreateLinkDto } from './dto/affiliate.dto';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
@@ -16,6 +16,30 @@ export class AffiliateController {
     @ApiOperation({ summary: 'Create a new affiliate link with a 6-character short code' })
     async createLink(@Body() data: CreateLinkDto) {
         return this.affiliateService.createLink(data);
+    }
+
+    @ApiBearerAuth()
+    @UseGuards(AuthGuard(['jwt', 'api-key']))
+    @Get('api/links')
+    @ApiOperation({ summary: 'Get all affiliate links' })
+    async findAllLinks() {
+        return this.affiliateService.findAll();
+    }
+
+    @ApiBearerAuth()
+    @UseGuards(AuthGuard(['jwt', 'api-key']))
+    @Patch('api/links/:id')
+    @ApiOperation({ summary: 'Update an affiliate link' })
+    async updateLink(@Param('id') id: string, @Body() data: any) {
+        return this.affiliateService.update(id, data);
+    }
+
+    @ApiBearerAuth()
+    @UseGuards(AuthGuard(['jwt', 'api-key']))
+    @Delete('api/links/:id')
+    @ApiOperation({ summary: 'Delete an affiliate link' })
+    async removeLink(@Param('id') id: string) {
+        return this.affiliateService.remove(id);
     }
 
     @Get('go/:short_code')

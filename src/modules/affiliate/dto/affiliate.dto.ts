@@ -10,3 +10,11 @@ export class CreateLinkDto {
     @ApiProperty({ example: 'https://example.com/target', description: 'The destination URL' })
     targetUrl: string;
 }
+
+export class UpdateLinkDto {
+    @ApiProperty({ example: 'https://example.com/target', description: 'The destination URL', required: false })
+    targetUrl?: string;
+
+    @ApiProperty({ example: 'uuid-of-campaign', description: 'The ID of the campaign', required: false })
+    campaignId?: string;
+}

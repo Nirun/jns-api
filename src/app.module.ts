@@ -8,10 +8,12 @@ import { AffiliateModule } from './modules/affiliate/affiliate.module';
 import { AnalyticsModule } from './modules/analytics/analytics.module';
 import { OffersModule } from './modules/offers/offers.module';
 import { CampaignsModule } from './modules/campaigns/campaigns.module';
+import { RedisModule } from './modules/redis/redis.module';
 
 @Module({
   imports: [
     PrismaModule,
+    RedisModule,
     AuthModule,
     ProductsModule,
     AffiliateModule,

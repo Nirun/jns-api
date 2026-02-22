@@ -25,7 +25,7 @@ describe('Assignment Sequence (e2e)', () => {
         const loginRes = await request(app.getHttpServer())
             .post('/auth/login')
             .send({ username: 'admin', password: 'password123' });
-        
+
         token = loginRes.body.access_token;
     });
 
@@ -39,7 +39,7 @@ describe('Assignment Sequence (e2e)', () => {
             .set('Authorization', `Bearer ${token}`)
             .send({
                 title: 'iPhone 15 Pro',
-                imageUrl: 'https://example.com/iphone15.jpg',
+                imageUrl: 'https://picsum.photos/400/400?random=1',
                 lazadaUrl: 'https://www.lazada.co.th/products/iphone15'
             })
             .expect(201);
