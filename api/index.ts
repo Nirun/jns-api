@@ -1,6 +1,7 @@
+// Path: api/api/index.ts
 import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter } from '@nestjs/platform-express';
-import { AppModule } from '../src/app.module'; // Adjust path if needed
+import { AppModule } from '../src/app.module';
 import express from 'express';
 
 const server = express();
@@ -10,9 +11,17 @@ export const createServer = async (expressInstance) => {
     AppModule,
     new ExpressAdapter(expressInstance),
   );
-  app.enableCors();
-  return await app.init();
+  
+  // Ensure this matches your requirement for public access
+  app.enableCors(); 
+  
+  // If you use a global prefix in main.ts, add it here too
+  // app.setGlobalPrefix('api'); 
+
+  await app.init();
 };
 
-createServer(server);
-export default server;
+export default async (req: any, res: any) => {
+  await createServer(server);
+  return server(req, res);
+};
