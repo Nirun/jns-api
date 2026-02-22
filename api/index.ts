@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import { AppModule } from '../src/app.module';
 import express from 'express';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 const server = express();
 
